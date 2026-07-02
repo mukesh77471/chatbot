@@ -4,7 +4,7 @@ import requests
 
 # Configure the page
 st.set_page_config(page_title="Free Chatbot", page_icon="🤖")
-st.title("🤖 Mukesh द्वारा दी गई जानकारी भी AI से ली गई है")
+st.title("🤖 Mukesh AI Assistant – For All Your Queries")
 
 # Securely fetch the API key (Streamlit Secrets handles this in deployment)
 api_key = st.secrets.get("GEMINI_API_KEY")
