@@ -1,7 +1,6 @@
 import streamlit as st
 import google.generativeai as genai
 import requests
-from langdetect import detect  # pip install langdetect
 
 # Configure the page
 st.set_page_config(page_title="Free Chatbot", page_icon="🤖")
@@ -65,7 +64,8 @@ else:
 Web search results:
 {web_data}
 
-Answer naturally in {user_lang}, continue the conversation like a human assistant, and include references when useful."""
+Answer naturally in the same language the user typed, continue the conversation like a human assistant, and include references when useful."""
+
 
         # Step 5: Gemini response
         with st.chat_message("assistant"):
