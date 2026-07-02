@@ -14,7 +14,7 @@ if not api_key:
     st.warning("Please configure your GEMINI_API_KEY in Streamlit Secrets.")
 else:
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-2.5-flash-lite")
+    model = genai.GenerativeModel("llama-3.1-8b-instant")
 
     if "messages" not in st.session_state:
         st.session_state.messages = []
