@@ -8,6 +8,7 @@ st.title("🤖 Mukesh द्वारा दी गई जानकारी भ
 
 # Securely fetch the API key (Streamlit Secrets handles this in deployment)
 api_key = st.secrets.get("GEMINI_API_KEY")
+bing_key = st.secrets.get("BING_API_KEY")
 
 if not api_key:
     st.warning("Please configure your GEMINI_API_KEY in Streamlit Secrets.")
@@ -15,7 +16,6 @@ else:
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel("gemini-3.5-flash")
 
-    # Initialize chat history if it doesn't exist
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
@@ -35,22 +35,25 @@ else:
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
                 try:
-                    # Step 1: Web search (using Bing Search API or any REST API)
+                    # Step 1: Web search for every query
                     search_url = f"https://api.bing.microsoft.com/v7.0/search?q={user_input}"
-                    headers = {"Ocp-Apim-Subscription-Key": st.secrets.get("BING_API_KEY")}
+                    headers = {"Ocp-Apim-Subscription-Key": bing_key}
                     web_data = ""
                     try:
                         resp = requests.get(search_url, headers=headers)
                         if resp.status_code == 200:
                             results = resp.json()
                             if "webPages" in results:
-                                snippets = [item["snippet"] for item in results["webPages"]["value"][:3]]
+                                snippets = [
+                                    f"{item['name']}: {item['snippet']} ({item['url']})"
+                                    for item in results["webPages"]["value"][:3]
+                                ]
                                 web_data = "\n".join(snippets)
                     except Exception as e:
                         web_data = f"(Web search error: {e})"
 
-                    # Step 2: Combine user input + web data
-                    prompt = f"User asked: {user_input}\n\nWeb search results:\n{web_data}\n\nAnswer clearly in Hindi."
+                    # Step 2: Combine user input + web search results
+                    prompt = f"User asked: {user_input}\n\nLatest web search results:\n{web_data}\n\nAnswer clearly in Hindi with references."
 
                     # Step 3: Gemini response
                     response = model.generate_content(prompt)
