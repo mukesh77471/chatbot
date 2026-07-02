@@ -12,7 +12,7 @@ if not api_key:
     str.warning("Please configure your GEMINI_API_KEY in Streamlit Secrets.")
 else:
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-3.5-flash")
 
     # Initialize chat history if it doesn't exist
     if "messages" not in str.session_state:
