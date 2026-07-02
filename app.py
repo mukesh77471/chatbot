@@ -1,6 +1,7 @@
 import streamlit as st
 import google.generativeai as genai
 import requests
+from langdetect import detect  # pip install langdetect
 
 # Configure the page
 st.set_page_config(page_title="Free Chatbot", page_icon="🤖")
@@ -51,16 +52,22 @@ else:
         for msg in st.session_state.messages[-5:]:
             history_text += f"{msg['role'].capitalize()}: {msg['content']}\n"
 
-        # Step 3: Combine history + web data
+        # Step 3: Detect user language
+        try:
+            user_lang = detect(user_input)
+        except Exception:
+            user_lang = "English"  # fallback
+
+        # Step 4: Combine history + web data + language instruction
         prompt = f"""Conversation so far:
 {history_text}
 
 Web search results:
 {web_data}
 
-Answer naturally in Hindi, continuing the conversation like a human assistant, and include references when useful."""
+Answer naturally in {user_lang}, continue the conversation like a human assistant, and include references when useful."""
 
-        # Step 4: Gemini response
+        # Step 5: Gemini response
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
                 try:
