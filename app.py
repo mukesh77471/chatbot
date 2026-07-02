@@ -3,7 +3,7 @@ import google.generativeai as genai
 
 # Configure the page
 str.set_page_config(page_title="Free Chatbot", page_icon="🤖")
-str.title("🤖 My Free AI Assistant")
+str.title("🤖 Mukesh द्वारा दी गई जानकारी भी AI से ली गई है")
 
 # Securely fetch the API key (Streamlit Secrets handles this in deployment)
 api_key = str.secrets.get("GEMINI_API_KEY")
